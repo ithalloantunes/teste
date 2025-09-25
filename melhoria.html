@@ -115,8 +115,8 @@
                         </div>
                     </div>
                 </header>
-                <div class="p-6 bg-surface-light dark:bg-surface-dark"><div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 gap-4"><div class="relative flex-1 md:max-w-md"><span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span><input id="search-input" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark" placeholder="Buscar..." type="text" /></div><div class="flex items-center space-x-2 flex-wrap gap-2"><div id="filter-buttons" class="flex items-center space-x-2"><button data-filter="all" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Todos</button><button data-filter="low_stock" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Estoque Baixo</button><button data-filter="expiring_soon" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Vencendo</button></div><button id="suggest-product-btn" class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium flex items-center space-x-2"><span class="material-icons text-base">auto_awesome</span><span>Sugerir</span></button></div></div></div>
-                <div id="product-container" class="flex-1 p-6 overflow-y-auto bg-background-light dark:bg-background-dark"><div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"></div></div>
+                <div class="p-6 bg-surface-light dark:bg-surface-dark"><div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 gap-4"><div class="relative flex-1 md:max-w-md"><span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span><input id="search-input" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark" placeholder="Buscar..." type="text" /></div><div class="flex items-center space-x-2 flex-wrap gap-2"><div id="filter-buttons" class="flex items-center space-x-2"><button data-filter="all" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Todos</button><button data-filter="low_stock" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Estoque Baixo</button><button data-filter="expiring_soon" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Vencendo</button></div><button id="suggest-product-btn" class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium flex items-center space-x-2"><span class="material-icons text-base">auto_awesome</span><span>Sugerir</span></button><div class="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg"><button id="grid-view-btn" class="p-2"><span class="material-icons">grid_view</span></button><button id="list-view-btn" class="p-2"><span class="material-icons">view_list</span></button></div></div></div></div>
+                <div id="product-container" class="flex-1 p-6 overflow-y-auto bg-background-light dark:bg-background-dark flex flex-col"><div id="product-grid" class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"></div><div id="pagination-controls" class="flex justify-center items-center mt-8 space-x-2"></div></div>
             </div>
 
             <!-- Reports Page -->
@@ -238,8 +238,12 @@
         ];
         let currentProductId = null;
         let stockByProductChart, stockByTypeChart;
-
-        // ... (DOM element selections remain the same)
+        let currentView = 'grid';
+        let currentlyDisplayedProducts = [];
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        
+        // DOM Elements
         const mainMenu = document.getElementById('main-menu');
         const mainContent = document.getElementById('main-content');
         const addProductLink = document.getElementById('add-product-link');
@@ -253,6 +257,8 @@
         const aiAnalysisBtn = document.getElementById('ai-analysis-btn');
         const quickAddBtn = document.getElementById('quick-add-product');
         const saveProfileBtn = document.getElementById('save-profile-btn');
+        const gridViewBtn = document.getElementById('grid-view-btn');
+        const listViewBtn = document.getElementById('list-view-btn');
 
         // Page Navigation
         const switchPage = (pageId) => {
@@ -340,7 +346,7 @@
             };
             productData.push(newProduct);
             closeModal('add-modal');
-            applyFilters();
+            applyFiltersAndPaginate();
         };
         const handleEditSubmit = (e) => {
             e.preventDefault();
@@ -356,13 +362,19 @@
                 };
             }
             closeModal('edit-modal');
-            applyFilters();
+            applyFiltersAndPaginate();
         };
-        const handleDeleteConfirm = () => { productData = productData.filter(p => p.id !== currentProductId); closeModal('delete-modal'); applyFilters(); };
+        const handleDeleteConfirm = () => { productData = productData.filter(p => p.id !== currentProductId); closeModal('delete-modal'); applyFiltersAndPaginate(); };
 
         const renderProducts = (products) => {
-            const productGrid = document.getElementById('product-grid');
             if(!productGrid) return;
+            
+            if (currentView === 'grid') {
+                productGrid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6';
+            } else {
+                productGrid.className = 'flex flex-col gap-4';
+            }
+
             productGrid.innerHTML = '';
             products.forEach(product => {
                 const stockPercentage = Math.min((product.quantity / 150) * 100, 100);
@@ -376,24 +388,57 @@
                 const isExpiringSoon = daysUntilExpiry <= 30 && daysUntilExpiry >= 0;
 
                 const cardElement = document.createElement('div');
-                cardElement.className = `group relative bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-1 flex flex-col ${isExpiringSoon ? 'border-2 border-yellow-400' : ''}`;
-                cardElement.innerHTML = `
-                    <div class="absolute top-2 left-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full z-10">${product.type}</div>
-                    ${isExpiringSoon ? `<div class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 rounded-full p-1.5 z-10" title="Vencendo"><span class="material-icons">warning</span></div>` : ''}
-                    <img alt="${product.name}" class="w-full h-40 object-cover" src="${product.image}" />
-                    <div class="p-4 flex-grow flex flex-col">
-                        <h3 class="font-bold">${product.name}</h3>
-                        <div class="mt-2 flex items-center justify-between">
-                            <span class="text-3xl font-bold text-primary">${product.quantity}</span>
-                            <div class="flex items-center text-sm text-subtle-light dark:text-subtle-dark"><span class="material-icons text-base mr-1">calendar_today</span><span>${new Date(product.expiryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</span></div>
+                
+                if (currentView === 'grid') {
+                    cardElement.className = `group relative bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm overflow-hidden transition-transform duration-300 hover:-translate-y-1 flex flex-col ${isExpiringSoon ? 'border-2 border-yellow-400' : ''}`;
+                    cardElement.innerHTML = `
+                        <div class="absolute top-2 left-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full z-10">${product.type}</div>
+                        ${isExpiringSoon ? `<div class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 rounded-full p-1.5 z-10" title="Vencendo"><span class="material-icons">warning</span></div>` : ''}
+                        <img alt="${product.name}" class="w-full h-40 object-cover" src="${product.image}" />
+                        <div class="p-4 flex-grow flex flex-col">
+                            <h3 class="font-bold">${product.name}</h3>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-3xl font-bold text-primary">${product.quantity}</span>
+                                <div class="flex items-center text-sm text-subtle-light dark:text-subtle-dark"><span class="material-icons text-base mr-1">calendar_today</span><span>${new Date(product.expiryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</span></div>
+                            </div>
+                            <div class="mt-auto pt-4"><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"><div class="${stockColor} h-2 rounded-full" style="width: ${stockPercentage}%"></div></div></div>
                         </div>
-                        <div class="mt-auto pt-4"><div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"><div class="${stockColor} h-2 rounded-full" style="width: ${stockPercentage}%"></div></div></div>
-                    </div>
-                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center space-x-2 card-actions p-2">
-                        <button class="generate-desc-btn bg-secondary text-white p-2 rounded-lg flex-1" title="Gerar Descrição"><span class="material-icons">auto_awesome</span></button>
-                        <button class="edit-btn bg-blue-500 text-white p-2 rounded-lg flex-1" title="Editar"><span class="material-icons">edit</span></button>
-                        <button class="delete-btn bg-danger text-white p-2 rounded-lg flex-1" title="Excluir"><span class="material-icons">delete</span></button>
-                    </div>`;
+                        <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center space-x-2 card-actions p-2">
+                            <button class="generate-desc-btn bg-secondary text-white p-2 rounded-lg flex-1" title="Gerar Descrição"><span class="material-icons">auto_awesome</span></button>
+                            <button class="edit-btn bg-blue-500 text-white p-2 rounded-lg flex-1" title="Editar"><span class="material-icons">edit</span></button>
+                            <button class="delete-btn bg-danger text-white p-2 rounded-lg flex-1" title="Excluir"><span class="material-icons">delete</span></button>
+                        </div>`;
+                } else {
+                     cardElement.className = `group relative bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm flex items-center p-4 transition-shadow hover:shadow-md`;
+                     cardElement.innerHTML = `
+                        <img alt="${product.name}" class="w-20 h-20 object-cover rounded-lg flex-shrink-0" src="${product.image}" />
+                        <div class="flex-1 ml-4 grid grid-cols-5 items-center gap-4">
+                            <div>
+                                <p class="font-bold">${product.name}</p>
+                                <p class="text-sm text-subtle-light dark:text-subtle-dark">Lote: ${product.lot}</p>
+                            </div>
+                             <div class="text-center">
+                                <span class="text-2xl font-bold text-primary">${product.quantity}</span>
+                                <p class="text-xs text-subtle-light dark:text-subtle-dark">Unidades</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="flex items-center justify-center text-sm text-subtle-light dark:text-subtle-dark">
+                                    <span class="material-icons text-base mr-1">calendar_today</span>
+                                    <span>${new Date(product.expiryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</span>
+                                </div>
+                                ${isExpiringSoon ? `<p class="text-xs text-yellow-500">Vencendo</p>` : ''}
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="${stockColor} h-2 rounded-full" style="width: ${stockPercentage}%"></div>
+                            </div>
+                            <div class="flex justify-end items-center gap-2">
+                                 <button class="generate-desc-btn bg-secondary text-white p-2 rounded-lg" title="Gerar Descrição"><span class="material-icons text-base">auto_awesome</span></button>
+                                 <button class="edit-btn bg-blue-500 text-white p-2 rounded-lg" title="Editar"><span class="material-icons text-base">edit</span></button>
+                                 <button class="delete-btn bg-danger text-white p-2 rounded-lg" title="Excluir"><span class="material-icons text-base">delete</span></button>
+                            </div>
+                        </div>`;
+                }
+                
                 cardElement.querySelector('.edit-btn').addEventListener('click', () => openEditModal(product.id));
                 cardElement.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(product.id));
                 cardElement.querySelector('.generate-desc-btn').addEventListener('click', async () => {
@@ -405,7 +450,7 @@
                 productGrid.appendChild(cardElement);
             });
         };
-        const applyFilters = () => {
+        const applyFiltersAndPaginate = () => {
             if(!filterButtonsContainer) return;
             const searchTerm = searchInput.value.toLowerCase();
             const activeFilter = filterButtonsContainer.querySelector('.bg-primary')?.dataset.filter || 'all';
@@ -419,7 +464,37 @@
                      return daysUntilExpiry <= 30 && daysUntilExpiry >= 0;
                 });
             }
-            renderProducts(filteredProducts);
+            currentlyDisplayedProducts = filteredProducts;
+            currentPage = 1;
+            renderPaginatedView();
+        };
+
+        const renderPaginatedView = () => {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedProducts = currentlyDisplayedProducts.slice(startIndex, endIndex);
+            renderProducts(paginatedProducts); 
+            renderPaginationControls();
+        };
+
+        const renderPaginationControls = () => {
+            const paginationContainer = document.getElementById('pagination-controls');
+            if (!paginationContainer) return;
+            const pageCount = Math.ceil(currentlyDisplayedProducts.length / itemsPerPage);
+            paginationContainer.innerHTML = '';
+            
+            if(pageCount <= 1) return;
+
+            for (let i = 1; i <= pageCount; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${i === currentPage ? 'bg-primary text-white' : 'bg-surface-light dark:bg-surface-dark hover:bg-gray-200 dark:hover:bg-gray-700'}`;
+                button.onclick = () => {
+                    currentPage = i;
+                    renderPaginatedView();
+                };
+                paginationContainer.appendChild(button);
+            }
         };
         
         const updateHomePage = () => {
@@ -457,19 +532,42 @@
             updateCharts();
         };
         const updateCharts = () => {
+             const chartFont = { family: 'Poppins' };
+            const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            const textColor = isDarkMode ? '#F9FAFB' : '#111827';
+             
              const labels = productData.map(p => p.name);
              const data = productData.map(p => p.quantity);
              const productChartCtx = document.getElementById('stock-by-product-chart');
              if (productChartCtx) {
                 if(stockByProductChart) stockByProductChart.destroy();
-                stockByProductChart = new Chart(productChartCtx, { type: 'bar', data: { labels, datasets: [{ label: 'Quantidade', data, backgroundColor: '#6D28D9' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+                const barGradient = productChartCtx.getContext('2d').createLinearGradient(0, 0, 0, productChartCtx.height);
+                barGradient.addColorStop(0, '#6D28D9');
+                barGradient.addColorStop(1, '#9333ea');
+                stockByProductChart = new Chart(productChartCtx, { 
+                    type: 'bar', 
+                    data: { labels, datasets: [{ label: 'Quantidade', data, backgroundColor: barGradient, borderRadius: 4 }] }, 
+                    options: { 
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: { bodyFont: chartFont, titleFont: chartFont, boxPadding: 8, cornerRadius: 4, backgroundColor: '#1F2937' } },
+                        scales: { y: { ticks: { color: textColor, font: chartFont }, grid: { color: gridColor, drawBorder: false } }, x: { ticks: { color: textColor, font: chartFont }, grid: { display: false } } }
+                    } 
+                });
              }
 
              const typeCounts = productData.reduce((acc, p) => { acc[p.type] = (acc[p.type] || 0) + p.quantity; return acc; }, {});
              const typeChartCtx = document.getElementById('stock-by-type-chart');
              if(typeChartCtx) {
                 if(stockByTypeChart) stockByTypeChart.destroy();
-                stockByTypeChart = new Chart(typeChartCtx, { type: 'doughnut', data: { labels: Object.keys(typeCounts), datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#6D28D9', '#9333ea', '#c084fc', '#e9d5ff'] }] }, options: { responsive: true } });
+                stockByTypeChart = new Chart(typeChartCtx, { 
+                    type: 'doughnut', 
+                    data: { labels: Object.keys(typeCounts), datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#6D28D9', '#9333ea', '#c084fc', '#e9d5ff'], borderColor: isDarkMode ? '#374151' : '#FFFFFF', borderWidth: 4 }] }, 
+                    options: { 
+                        responsive: true, maintainAspectRatio: false, cutout: '70%',
+                        plugins: { legend: { position: 'bottom', labels: { color: textColor, font: chartFont, boxWidth: 12, padding: 20 } }, tooltip: { bodyFont: chartFont, titleFont: chartFont, boxPadding: 8, cornerRadius: 4, backgroundColor: '#1F2937' } }
+                    } 
+                });
              }
         };
         const renderApprovalPage = () => {
@@ -550,13 +648,14 @@
                 });
             });
             
-            addProductLink.addEventListener('click', e => { e.preventDefault(); openAddModal(); });
-            quickAddBtn.addEventListener('click', openAddModal);
-            saveProfileBtn.addEventListener('click', handleProfileSave);
-            addForm.addEventListener('submit', handleAddSubmit);
-            editForm.addEventListener('submit', handleEditSubmit);
-            confirmDeleteBtn.addEventListener('click', handleDeleteConfirm);
-            searchInput.addEventListener('input', applyFilters);
+            if(addProductLink) addProductLink.addEventListener('click', e => { e.preventDefault(); openAddModal(); });
+            if(quickAddBtn) quickAddBtn.addEventListener('click', openAddModal);
+            if(saveProfileBtn) saveProfileBtn.addEventListener('click', handleProfileSave);
+            if(addForm) addForm.addEventListener('submit', handleAddSubmit);
+            if(editForm) editForm.addEventListener('submit', handleEditSubmit);
+            if(confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', handleDeleteConfirm);
+            if(searchInput) searchInput.addEventListener('input', applyFiltersAndPaginate);
+            
             mainMenu.addEventListener('click', (e) => {
                 const link = e.target.closest('a');
                 if (link && link.dataset.page) {
@@ -569,21 +668,25 @@
                 }
             });
             document.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.closeModal)));
-            filterButtonsContainer.addEventListener('click', (e) => {
-                const button = e.target.closest('button');
-                if(button) {
-                    filterButtonsContainer.querySelector('.bg-primary')?.classList.remove('bg-primary', 'text-white');
-                    button.classList.add('bg-primary', 'text-white');
-                    applyFilters();
-                }
-            });
-            suggestProductBtn.addEventListener('click', async () => {
-                const existing = productData.map(p => p.name).join(', ');
-                const suggestion = await callGeminiAPI(`Baseado em: ${existing}, sugira 3 novos sabores de açaí com nomes criativos.`);
-                document.getElementById('ai-modal-title').querySelector('span:last-child').textContent = 'Sugestão de Produtos';
-                document.getElementById('ai-modal-body').innerHTML = suggestion;
-                openModal('ai-modal');
-            });
+            if (filterButtonsContainer) {
+                filterButtonsContainer.addEventListener('click', (e) => {
+                    const button = e.target.closest('button');
+                    if(button) {
+                        filterButtonsContainer.querySelector('.bg-primary')?.classList.remove('bg-primary', 'text-white');
+                        button.classList.add('bg-primary', 'text-white');
+                        applyFiltersAndPaginate();
+                    }
+                });
+            }
+            if(suggestProductBtn) {
+                suggestProductBtn.addEventListener('click', async () => {
+                    const existing = productData.map(p => p.name).join(', ');
+                    const suggestion = await callGeminiAPI(`Baseado em: ${existing}, sugira 3 novos sabores de açaí com nomes criativos.`);
+                    document.getElementById('ai-modal-title').querySelector('span:last-child').textContent = 'Sugestão de Produtos';
+                    document.getElementById('ai-modal-body').innerHTML = suggestion;
+                    openModal('ai-modal');
+                });
+            }
             if (aiAnalysisBtn) {
                 aiAnalysisBtn.addEventListener('click', async () => {
                     const summary = `Estoque total: ${document.getElementById('kpi-total-stock').textContent}, Itens vencendo: ${document.getElementById('kpi-expiring').textContent}, Entradas: ${document.getElementById('kpi-inputs').textContent}, Saídas: ${document.getElementById('kpi-outputs').textContent}.`;
@@ -591,6 +694,20 @@
                     document.getElementById('ai-modal-title').querySelector('span:last-child').textContent = 'Análise de Relatório';
                     document.getElementById('ai-modal-body').innerHTML = analysis;
                     openModal('ai-modal');
+                });
+            }
+            if(gridViewBtn && listViewBtn){
+                 gridViewBtn.addEventListener('click', () => {
+                    currentView = 'grid';
+                    gridViewBtn.classList.add('bg-primary', 'text-white');
+                    listViewBtn.classList.remove('bg-primary', 'text-white');
+                    applyFiltersAndPaginate();
+                });
+                listViewBtn.addEventListener('click', () => {
+                    currentView = 'list';
+                    listViewBtn.classList.add('bg-primary', 'text-white');
+                    gridViewBtn.classList.remove('bg-primary', 'text-white');
+                    applyFiltersAndPaginate();
                 });
             }
         };
@@ -603,8 +720,14 @@
         
         // Initial Page Load
         document.querySelector('#home-menu-item').click();
-        filterButtonsContainer.querySelector('[data-filter="all"]').classList.add('bg-primary', 'text-white');
-        applyFilters();
+        if(filterButtonsContainer) {
+            filterButtonsContainer.querySelector('[data-filter="all"]').classList.add('bg-primary', 'text-white');
+        }
+        if(gridViewBtn) {
+            gridViewBtn.classList.add('bg-primary', 'text-white');
+        }
+        
+        applyFiltersAndPaginate();
     });
 </script>
 </body>
