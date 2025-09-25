@@ -69,6 +69,19 @@
             <div id="home-page" class="page-content flex-1 flex flex-col">
                  <header class="flex items-center justify-between p-6 bg-surface-light dark:bg-surface-dark border-b border-gray-200 dark:border-gray-700">
                     <div><h2 class="text-2xl font-bold">Dashboard</h2><p class="text-subtle-light dark:text-subtle-dark">Bem-vindo de volta, IThallo!</p></div>
+                    <div class="relative">
+                        <button class="user-menu-button flex items-center gap-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <img src="https://placehold.co/40x40/6D28D9/FFFFFF?text=I" alt="Avatar do Usuário" class="user-avatar-img w-10 h-10 rounded-full object-cover">
+                            <span class="font-medium hidden md:block">IThallo</span>
+                            <span class="material-icons text-subtle-light dark:text-subtle-dark">expand_more</span>
+                        </button>
+                        <div class="user-dropdown-menu hidden absolute right-0 mt-2 w-48 bg-surface-light dark:bg-surface-dark rounded-lg shadow-xl z-10 border border-gray-200 dark:border-gray-600">
+                            <a href="#" class="profile-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Perfil</a>
+                            <a href="#" data-page="approve-page" class="approve-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Aprovar Cadastro</a>
+                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-danger dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">Sair</a>
+                        </div>
+                    </div>
                  </header>
                 <div class="flex-1 p-8 overflow-y-auto">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -86,14 +99,50 @@
 
             <!-- Stock Page -->
             <div id="stock-page" class="page-content flex-1 flex flex-col hidden">
-                <header class="flex justify-between items-center p-6 bg-surface-light dark:bg-surface-dark border-b dark:border-gray-700"><h1 class="text-2xl font-bold">Estoque</h1></header>
+                <header class="flex justify-between items-center p-6 bg-surface-light dark:bg-surface-dark border-b dark:border-gray-700">
+                    <h1 class="text-2xl font-bold">Estoque</h1>
+                     <div class="relative">
+                        <button class="user-menu-button flex items-center gap-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                           <img src="https://placehold.co/40x40/6D28D9/FFFFFF?text=I" alt="Avatar do Usuário" class="user-avatar-img w-10 h-10 rounded-full object-cover">
+                            <span class="font-medium hidden md:block">IThallo</span>
+                            <span class="material-icons text-subtle-light dark:text-subtle-dark">expand_more</span>
+                        </button>
+                        <div class="user-dropdown-menu hidden absolute right-0 mt-2 w-48 bg-surface-light dark:bg-surface-dark rounded-lg shadow-xl z-10 border border-gray-200 dark:border-gray-600">
+                            <a href="#" class="profile-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Perfil</a>
+                            <a href="#" data-page="approve-page" class="approve-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Aprovar Cadastro</a>
+                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-danger dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">Sair</a>
+                        </div>
+                    </div>
+                </header>
                 <div class="p-6 bg-surface-light dark:bg-surface-dark"><div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 gap-4"><div class="relative flex-1 md:max-w-md"><span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span><input id="search-input" class="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-primary focus:border-primary bg-background-light dark:bg-background-dark" placeholder="Buscar..." type="text" /></div><div class="flex items-center space-x-2 flex-wrap gap-2"><div id="filter-buttons" class="flex items-center space-x-2"><button data-filter="all" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Todos</button><button data-filter="low_stock" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Estoque Baixo</button><button data-filter="expiring_soon" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium">Vencendo</button></div><button id="suggest-product-btn" class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium flex items-center space-x-2"><span class="material-icons text-base">auto_awesome</span><span>Sugerir</span></button></div></div></div>
                 <div id="product-container" class="flex-1 p-6 overflow-y-auto bg-background-light dark:bg-background-dark"><div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6"></div></div>
             </div>
 
             <!-- Reports Page -->
             <div id="reports-page" class="page-content hidden flex-1 flex flex-col">
-                <header class="flex justify-between items-center p-6 bg-surface-light dark:bg-surface-dark border-b dark:border-gray-700"><h1 class="text-2xl font-bold">Relatórios</h1><button id="ai-analysis-btn" class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium flex items-center space-x-2"><span class="material-icons text-base">auto_awesome</span><span>Analisar com IA</span></button></header>
+                <header class="flex justify-between items-center p-6 bg-surface-light dark:bg-surface-dark border-b dark:border-gray-700">
+                    <h1 class="text-2xl font-bold">Relatórios</h1>
+                    <div class="flex items-center gap-4">
+                        <button id="ai-analysis-btn" class="px-4 py-2 bg-secondary text-white rounded-lg text-sm font-medium flex items-center space-x-2">
+                            <span class="material-icons text-base">auto_awesome</span>
+                            <span>Analisar com IA</span>
+                        </button>
+                         <div class="relative">
+                            <button class="user-menu-button flex items-center gap-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <img src="https://placehold.co/40x40/6D28D9/FFFFFF?text=I" alt="Avatar do Usuário" class="user-avatar-img w-10 h-10 rounded-full object-cover">
+                                <span class="font-medium hidden md:block">IThallo</span>
+                                <span class="material-icons text-subtle-light dark:text-subtle-dark">expand_more</span>
+                            </button>
+                            <div class="user-dropdown-menu hidden absolute right-0 mt-2 w-48 bg-surface-light dark:bg-surface-dark rounded-lg shadow-xl z-10 border border-gray-200 dark:border-gray-600">
+                                <a href="#" class="profile-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Perfil</a>
+                                <a href="#" data-page="approve-page" class="approve-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Aprovar Cadastro</a>
+                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                <a href="#" class="block px-4 py-2 text-sm text-danger dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">Sair</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
                 <div class="flex-1 p-8 overflow-y-auto bg-background-light dark:bg-background-dark">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl shadow-sm flex items-center"><div class="p-3 rounded-full bg-green-500/10"><span class="material-icons text-2xl text-green-500">arrow_downward</span></div><div class="ml-4"><p class="text-sm text-subtle-light dark:text-subtle-dark">Total de Entradas</p><p id="kpi-inputs" class="text-2xl font-bold"></p></div></div>
@@ -102,11 +151,46 @@
                         <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl shadow-sm flex items-center"><div class="p-3 rounded-full bg-yellow-500/10"><span class="material-icons text-2xl text-yellow-500">warning</span></div><div class="ml-4"><p class="text-sm text-subtle-light dark:text-subtle-dark">Alertas (Venc.)</p><p id="kpi-expiring" class="text-2xl font-bold"></p></div></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm"><h3 class="font-semibold text-lg mb-4">Estoque por Produto</h3><canvas id="stock-by-product-chart"></canvas></div>
-                        <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm"><h3 class="font-semibold text-lg mb-4">Distribuição por Tipo</h3><canvas id="stock-by-type-chart"></canvas></div>
+                        <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm h-96"><h3 class="font-semibold text-lg mb-4">Estoque por Produto</h3><canvas id="stock-by-product-chart"></canvas></div>
+                        <div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl shadow-sm h-96"><h3 class="font-semibold text-lg mb-4">Distribuição por Tipo</h3><canvas id="stock-by-type-chart"></canvas></div>
                     </div>
                 </div>
             </div>
+
+            <!-- Approve Page -->
+            <div id="approve-page" class="page-content hidden flex-1 flex flex-col">
+                 <header class="flex justify-between items-center p-6 bg-surface-light dark:bg-surface-dark border-b dark:border-gray-700">
+                     <h1 class="text-2xl font-bold">Gerenciar Cadastros</h1>
+                      <div class="relative">
+                        <button class="user-menu-button flex items-center gap-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <img src="https://placehold.co/40x40/6D28D9/FFFFFF?text=I" alt="Avatar do Usuário" class="user-avatar-img w-10 h-10 rounded-full object-cover">
+                            <span class="font-medium hidden md:block">IThallo</span>
+                            <span class="material-icons text-subtle-light dark:text-subtle-dark">expand_more</span>
+                        </button>
+                        <div class="user-dropdown-menu hidden absolute right-0 mt-2 w-48 bg-surface-light dark:bg-surface-dark rounded-lg shadow-xl z-10 border border-gray-200 dark:border-gray-600">
+                            <a href="#" class="profile-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Perfil</a>
+                            <a href="#" data-page="approve-page" class="approve-link block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600">Aprovar Cadastro</a>
+                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-danger dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">Sair</a>
+                        </div>
+                    </div>
+                </header>
+                <div class="flex-1 p-8 overflow-y-auto bg-background-light dark:bg-background-dark space-y-8">
+                    <div>
+                        <h2 class="text-lg font-semibold mb-4">Aguardando Aprovação</h2>
+                        <div id="pending-users-list" class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm p-4 space-y-3">
+                            <!-- Pending users will be rendered here -->
+                        </div>
+                    </div>
+                     <div>
+                        <h2 class="text-lg font-semibold mb-4">Usuários Ativos</h2>
+                        <div id="active-users-list" class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm p-4 space-y-3">
+                            <!-- Active users will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Moves Page -->
             <div id="moves-page" class="page-content hidden flex-1 flex flex-col">
@@ -117,6 +201,7 @@
     </div>
 
     <!-- Modals -->
+    <div id="profile-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden"><div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-xl w-full max-w-md"><header class="flex items-center justify-between p-4 border-b dark:border-gray-700"><h2 class="text-xl font-bold flex items-center gap-2"><span class="material-icons">person</span><span>Meu Perfil</span></h2><button data-close-modal="profile-modal" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><span class="material-icons">close</span></button></header><main class="p-6 space-y-4 flex flex-col items-center"><img id="profile-modal-image" src="" alt="Foto de Perfil" class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-primary"><label for="profile-image-upload" class="cursor-pointer bg-secondary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary/90">Alterar Foto<input type="file" name="profile_image" id="profile-image-upload" class="hidden" accept="image/*"></label></main><footer class="flex justify-end p-4 bg-gray-50 dark:bg-gray-800 space-x-2"><button type="button" data-close-modal="profile-modal" class="px-4 py-2 rounded-lg">Fechar</button><button id="save-profile-btn" type="button" class="px-4 py-2 bg-primary text-white rounded-lg">Salvar</button></footer></div></div>
     <div id="ai-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden"><div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col"><header class="flex items-center justify-between p-4 border-b dark:border-gray-700"><h2 id="ai-modal-title" class="text-xl font-bold flex items-center gap-2"><span class="material-icons text-secondary">auto_awesome</span><span></span></h2><button data-close-modal="ai-modal" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"><span class="material-icons">close</span></button></header><main id="ai-modal-body" class="p-6 overflow-y-auto"></main></div></div>
     <div id="add-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden"><div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-xl w-full max-w-lg"><header class="flex items-center justify-between p-4 border-b dark:border-gray-700"><h2 class="text-xl font-bold flex items-center gap-2"><span class="material-icons">add_circle</span><span>Adicionar</span></h2><button data-close-modal="add-modal" class="p-2 rounded-full"><span class="material-icons">close</span></button></header><form id="add-form"><main class="p-6 space-y-4"><label class="block text-sm font-medium">Imagem<input type="file" name="image" id="add-image" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-50 file:text-primary hover:file:bg-violet-100"><img id="add-image-preview" src="https://placehold.co/100x100/E2E8F0/4A5568?text=Preview" alt="Preview" class="mt-2 rounded-md h-24 w-24 object-cover hidden"></label><label class="block text-sm font-medium">Tipo<select name="type" id="add-type" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"><option>Açaí</option><option>Sorvete</option><option>Complemento</option><option>Bebida</option></select></label><label class="block text-sm font-medium">Nome<input type="text" name="name" id="add-name" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><label class="block text-sm font-medium">Lote<input type="text" name="lot" id="add-lot" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><div class="grid grid-cols-2 gap-4"><label class="block text-sm font-medium">Quantidade<input type="number" name="quantity" id="add-quantity" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><label class="block text-sm font-medium">Validade<input type="date" name="expiryDate" id="add-expiryDate" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label></div></main><footer class="flex justify-end p-4 bg-gray-50 dark:bg-gray-800 space-x-2"><button type="button" data-close-modal="add-modal" class="px-4 py-2 rounded-lg">Cancelar</button><button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg">Adicionar</button></footer></form></div></div>
     <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden"><div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-xl w-full max-w-lg"><header class="flex items-center justify-between p-4 border-b dark:border-gray-700"><h2 class="text-xl font-bold flex items-center gap-2"><span class="material-icons">edit</span><span>Editar</span></h2><button data-close-modal="edit-modal" class="p-2 rounded-full"><span class="material-icons">close</span></button></header><form id="edit-form"><main class="p-6 space-y-4"><input type="hidden" id="edit-id" name="id"><label class="block text-sm font-medium">Imagem<input type="file" name="image" id="edit-image" class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-violet-50 file:text-primary hover:file:bg-violet-100"><img id="edit-image-preview" src="" alt="Preview" class="mt-2 rounded-md h-24 w-24 object-cover"></label><label class="block text-sm font-medium">Tipo<select name="type" id="edit-type" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"><option>Açaí</option><option>Sorvete</option><option>Complemento</option><option>Bebida</option></select></label><label class="block text-sm font-medium">Nome<input type="text" name="name" id="edit-name" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><label class="block text-sm font-medium">Lote<input type="text" name="lot" id="edit-lot" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><div class="grid grid-cols-2 gap-4"><label class="block text-sm font-medium">Quantidade<input type="number" name="quantity" id="edit-quantity" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label><label class="block text-sm font-medium">Validade<input type="date" name="expiryDate" id="edit-expiryDate" required class="w-full border rounded-lg p-2 bg-background-light dark:bg-background-dark"></label></div></main><footer class="flex justify-end p-4 bg-gray-50 dark:bg-gray-800 space-x-2"><button type="button" data-close-modal="edit-modal" class="px-4 py-2 rounded-lg">Cancelar</button><button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg">Salvar</button></footer></form></div></div>
@@ -125,29 +210,36 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        let productData = [
-            { id: 1, type: 'Açaí', name: 'Açaí com Banana', lot: 'A-112', quantity: 43, expiryDate: '2025-09-09', image: 'https://placehold.co/400x300/C8B6FF/4B0082?text=Açaí+Banana', cost: 15.50 },
-            { id: 2, type: 'Açaí', name: 'Açaí com Morango', lot: 'A-113', quantity: 81, expiryDate: '2025-10-15', image: 'https://placehold.co/400x300/A2E3C4/004D40?text=Açaí+Morango', cost: 16.00 },
-            { id: 3, type: 'Açaí', name: 'Açaí Premium Natural', lot: 'A-114', quantity: 22, expiryDate: '2025-10-30', image: 'https://placehold.co/400x300/9FA8DA/1A237E?text=Açaí+Natural', cost: 14.00 },
-            { id: 4, type: 'Sorvete', name: 'Sorvete de Ninho', lot: 'S-305', quantity: 150, expiryDate: '2026-08-14', image: 'https://placehold.co/400x300/BCAAA4/3E2723?text=Sorvete+Ninho', cost: 12.00 },
-            { id: 5, type: 'Bebida', name: 'Suco de Laranja', lot: 'L-450', quantity: 60, expiryDate: '2025-09-28', image: 'https://placehold.co/400x300/FFAB91/BF360C?text=Suco+Laranja', cost: 5.00 },
+        let userProfile = {
+            name: 'IThallo',
+            avatar: 'https://placehold.co/100x100/6D28D9/FFFFFF?text=I'
+        };
+        let usersData = [
+            { id: 1, name: 'Ana Silva', email: 'ana.silva@email.com', avatar: 'https://placehold.co/40x40/f472b6/ffffff?text=A', status: 'pending' },
+            { id: 2, name: 'Carlos Souza', email: 'carlos.souza@email.com', avatar: 'https://placehold.co/40x40/38bdf8/ffffff?text=C', status: 'pending' },
+            { id: 3, name: 'Bruno Lima', email: 'bruno.lima@email.com', avatar: 'https://placehold.co/40x40/22c55e/ffffff?text=B', status: 'active' },
+            { id: 4, name: 'Daniela Costa', email: 'daniela.costa@email.com', avatar: 'https://placehold.co/40x40/eab308/ffffff?text=D', status: 'active' }
         ];
-
+        let productData = [
+             { id: 1, type: 'Açaí', name: 'Açaí com Banana', lot: 'A-112', quantity: 43, expiryDate: '2025-09-09', image: 'https://placehold.co/400x300/C8B6FF/4B0082?text=Açaí+Banana', cost: 15.50 },
+             { id: 2, type: 'Açaí', name: 'Açaí com Morango', lot: 'A-113', quantity: 81, expiryDate: '2025-10-15', image: 'https://placehold.co/400x300/A2E3C4/004D40?text=Açaí+Morango', cost: 16.00 },
+             { id: 3, type: 'Açaí', name: 'Açaí Premium Natural', lot: 'A-114', quantity: 22, expiryDate: '2025-10-30', image: 'https://placehold.co/400x300/9FA8DA/1A237E?text=Açaí+Natural', cost: 14.00 },
+             { id: 4, type: 'Sorvete', name: 'Sorvete de Ninho', lot: 'S-305', quantity: 150, expiryDate: '2026-08-14', image: 'https://placehold.co/400x300/BCAAA4/3E2723?text=Sorvete+Ninho', cost: 12.00 },
+             { id: 5, type: 'Bebida', name: 'Suco de Laranja', lot: 'L-450', quantity: 60, expiryDate: '2025-09-28', image: 'https://placehold.co/400x300/FFAB91/BF360C?text=Suco+Laranja', cost: 5.00 },
+        ];
         let movementsData = [
             { type: 'input', quantity: 500, date: new Date() }, { type: 'input', quantity: 300, date: new Date() },
             { type: 'output', quantity: 200, date: new Date() }, { type: 'output', quantity: 180, date: new Date() }
         ];
-        
         let activityLog = [
             { icon: 'add', color: 'green', title: 'Entrada: 50x Polpa de Açaí', subtitle: 'Usuário: IThallo', time: 'há 15 minutos' },
             { icon: 'remove', color: 'red', title: 'Saída: 10x Granola 500g', subtitle: 'Pedido #1204', time: 'há 1 hora' },
             { icon: 'edit', color: 'yellow', title: 'Produto "Leite em Pó" atualizado', subtitle: 'Estoque mínimo alterado', time: 'há 3 horas' },
         ];
-
         let currentProductId = null;
         let stockByProductChart, stockByTypeChart;
 
-        // DOM Elements
+        // ... (DOM element selections remain the same)
         const mainMenu = document.getElementById('main-menu');
         const mainContent = document.getElementById('main-content');
         const addProductLink = document.getElementById('add-product-link');
@@ -160,14 +252,23 @@
         const suggestProductBtn = document.getElementById('suggest-product-btn');
         const aiAnalysisBtn = document.getElementById('ai-analysis-btn');
         const quickAddBtn = document.getElementById('quick-add-product');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
 
-        // Modal & Loader Functions
-        const openModal = (modalId) => document.getElementById(modalId)?.classList.remove('hidden');
+        // Page Navigation
+        const switchPage = (pageId) => {
+            document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId)?.classList.remove('hidden');
+            if(pageId === 'reports-page') updateReports();
+            if(pageId === 'home-page') updateHomePage();
+            if(pageId === 'approve-page') renderApprovalPage();
+        };
+        
+        // ... (All other functions: CRUD, rendering, reports, etc., remain the same)
+         const openModal = (modalId) => document.getElementById(modalId)?.classList.remove('hidden');
         const closeModal = (modalId) => document.getElementById(modalId)?.classList.add('hidden');
         const showLoader = () => document.getElementById('loader').classList.remove('hidden');
         const hideLoader = () => document.getElementById('loader').classList.add('hidden');
         
-        // Image Preview
         const setupImagePreview = (inputId, previewId) => {
             const input = document.getElementById(inputId), preview = document.getElementById(previewId);
             input.addEventListener('change', () => {
@@ -179,7 +280,6 @@
             });
         };
         
-        // Gemini API Call
         const callGeminiAPI = async (prompt) => {
              showLoader();
              try {
@@ -198,15 +298,13 @@
              }
         };
 
-        // Page Navigation
-        const switchPage = (pageId) => {
-            mainContent.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
-            document.getElementById(pageId)?.classList.remove('hidden');
-            if(pageId === 'reports-page') updateReports();
-            if(pageId === 'home-page') updateHomePage();
+        const openProfileModal = () => { document.getElementById('profile-modal-image').src = userProfile.avatar; openModal('profile-modal'); };
+        const handleProfileSave = () => {
+            const newAvatarSrc = document.getElementById('profile-modal-image').src;
+            userProfile.avatar = newAvatarSrc;
+            document.querySelectorAll('.user-avatar-img').forEach(img => { img.src = newAvatarSrc; });
+            closeModal('profile-modal');
         };
-
-        // Product Actions (CRUD)
         const openAddModal = () => { addForm.reset(); document.getElementById('add-image-preview').classList.add('hidden'); openModal('add-modal'); }
         const openEditModal = (id) => {
             currentProductId = id;
@@ -238,7 +336,7 @@
             const newProduct = {
                 id: newId, type: formData.get('type'), name: formData.get('name'), lot: formData.get('lot'),
                 quantity: parseInt(formData.get('quantity')), expiryDate: formData.get('expiryDate'),
-                image: imageSrc, cost: parseFloat(Math.random() * 10 + 5).toFixed(2) // Mock cost
+                image: imageSrc, cost: parseFloat(Math.random() * 10 + 5).toFixed(2)
             };
             productData.push(newProduct);
             closeModal('add-modal');
@@ -262,8 +360,9 @@
         };
         const handleDeleteConfirm = () => { productData = productData.filter(p => p.id !== currentProductId); closeModal('delete-modal'); applyFilters(); };
 
-        // Render & Filter Functions (Stock Page)
         const renderProducts = (products) => {
+            const productGrid = document.getElementById('product-grid');
+            if(!productGrid) return;
             productGrid.innerHTML = '';
             products.forEach(product => {
                 const stockPercentage = Math.min((product.quantity / 150) * 100, 100);
@@ -307,6 +406,7 @@
             });
         };
         const applyFilters = () => {
+            if(!filterButtonsContainer) return;
             const searchTerm = searchInput.value.toLowerCase();
             const activeFilter = filterButtonsContainer.querySelector('.bg-primary')?.dataset.filter || 'all';
             let filteredProducts = productData.filter(p => p.name.toLowerCase().includes(searchTerm) || p.type.toLowerCase().includes(searchTerm));
@@ -322,7 +422,6 @@
             renderProducts(filteredProducts);
         };
         
-        // Page Update Functions
         const updateHomePage = () => {
             const totalStock = productData.reduce((sum, p) => sum + p.quantity, 0);
             const lowStockCount = productData.filter(p => p.quantity < 25).length;
@@ -360,17 +459,100 @@
         const updateCharts = () => {
              const labels = productData.map(p => p.name);
              const data = productData.map(p => p.quantity);
-             if(stockByProductChart) stockByProductChart.destroy();
-             stockByProductChart = new Chart(document.getElementById('stock-by-product-chart'), { type: 'bar', data: { labels, datasets: [{ label: 'Quantidade', data, backgroundColor: '#6D28D9' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+             const productChartCtx = document.getElementById('stock-by-product-chart');
+             if (productChartCtx) {
+                if(stockByProductChart) stockByProductChart.destroy();
+                stockByProductChart = new Chart(productChartCtx, { type: 'bar', data: { labels, datasets: [{ label: 'Quantidade', data, backgroundColor: '#6D28D9' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
+             }
+
              const typeCounts = productData.reduce((acc, p) => { acc[p.type] = (acc[p.type] || 0) + p.quantity; return acc; }, {});
-             if(stockByTypeChart) stockByTypeChart.destroy();
-             stockByTypeChart = new Chart(document.getElementById('stock-by-type-chart'), { type: 'doughnut', data: { labels: Object.keys(typeCounts), datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#6D28D9', '#9333ea', '#c084fc', '#e9d5ff'] }] }, options: { responsive: true } });
+             const typeChartCtx = document.getElementById('stock-by-type-chart');
+             if(typeChartCtx) {
+                if(stockByTypeChart) stockByTypeChart.destroy();
+                stockByTypeChart = new Chart(typeChartCtx, { type: 'doughnut', data: { labels: Object.keys(typeCounts), datasets: [{ data: Object.values(typeCounts), backgroundColor: ['#6D28D9', '#9333ea', '#c084fc', '#e9d5ff'] }] }, options: { responsive: true } });
+             }
         };
+        const renderApprovalPage = () => {
+            const pendingList = document.getElementById('pending-users-list');
+            const activeList = document.getElementById('active-users-list');
+            pendingList.innerHTML = '';
+            activeList.innerHTML = '';
+            
+            const pendingUsers = usersData.filter(u => u.status === 'pending');
+            const activeUsers = usersData.filter(u => u.status === 'active');
+
+            if (pendingUsers.length === 0) {
+                pendingList.innerHTML = `<p class="text-subtle-light dark:text-subtle-dark text-center py-4">Nenhum usuário aguardando aprovação.</p>`;
+            } else {
+                pendingUsers.forEach(user => {
+                    const userEl = document.createElement('div');
+                    userEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50';
+                    userEl.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <img src="${user.avatar}" alt="${user.name}" class="w-10 h-10 rounded-full object-cover">
+                            <div><p class="font-semibold">${user.name}</p><p class="text-sm text-subtle-light dark:text-subtle-dark">${user.email}</p></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button data-user-id="${user.id}" class="approve-user-btn p-2 rounded-full text-green-500 hover:bg-green-100 dark:hover:bg-green-900/50"><span class="material-icons">check_circle</span></button>
+                            <button data-user-id="${user.id}" class="decline-user-btn p-2 rounded-full text-danger hover:bg-red-100 dark:hover:bg-red-900/50"><span class="material-icons">cancel</span></button>
+                        </div>`;
+                    pendingList.appendChild(userEl);
+                });
+            }
+
+            if (activeUsers.length === 0) {
+                activeList.innerHTML = `<p class="text-subtle-light dark:text-subtle-dark text-center py-4">Nenhum usuário ativo.</p>`;
+            } else {
+                activeUsers.forEach(user => {
+                    const userEl = document.createElement('div');
+                    userEl.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50';
+                    userEl.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <img src="${user.avatar}" alt="${user.name}" class="w-10 h-10 rounded-full object-cover">
+                            <div><p class="font-semibold">${user.name}</p><p class="text-sm text-subtle-light dark:text-subtle-dark">${user.email}</p></div>
+                        </div>
+                        <button data-user-id="${user.id}" class="delete-user-btn p-2 rounded-full text-danger hover:bg-red-100 dark:hover:bg-red-900/50"><span class="material-icons">delete</span></button>`;
+                    activeList.appendChild(userEl);
+                });
+            }
+            document.querySelectorAll('.approve-user-btn').forEach(btn => btn.addEventListener('click', () => approveUser(parseInt(btn.dataset.userId))));
+            document.querySelectorAll('.decline-user-btn').forEach(btn => btn.addEventListener('click', () => declineUser(parseInt(btn.dataset.userId))));
+            document.querySelectorAll('.delete-user-btn').forEach(btn => btn.addEventListener('click', () => deleteUser(parseInt(btn.dataset.userId))));
+        };
+        const approveUser = (userId) => { const user = usersData.find(u => u.id === userId); if (user) user.status = 'active'; renderApprovalPage(); };
+        const declineUser = (userId) => { usersData = usersData.filter(u => u.id !== userId); renderApprovalPage(); };
+        const deleteUser = (userId) => { usersData = usersData.filter(u => u.id !== userId); renderApprovalPage(); };
 
         // Event Listeners Setup
         const setupEventListeners = () => {
+            document.querySelectorAll('.user-menu-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const dropdown = button.nextElementSibling;
+                    document.querySelectorAll('.user-dropdown-menu').forEach(menu => { if (menu !== dropdown) menu.classList.add('hidden'); });
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+            window.addEventListener('click', (e) => {
+                 document.querySelectorAll('.user-dropdown-menu').forEach(menu => {
+                    const button = menu.previousElementSibling;
+                    if (!button.contains(e.target) && !menu.contains(e.target)) { menu.classList.add('hidden'); }
+                 });
+            });
+            
+            document.querySelectorAll('.profile-link').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); openProfileModal(); }));
+            document.querySelectorAll('.approve-link').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    switchPage(link.dataset.page);
+                    mainMenu.querySelectorAll('a').forEach(item => item.classList.remove('bg-white/20', 'text-white'));
+                    addProductLink.style.display = 'none';
+                });
+            });
+            
             addProductLink.addEventListener('click', e => { e.preventDefault(); openAddModal(); });
             quickAddBtn.addEventListener('click', openAddModal);
+            saveProfileBtn.addEventListener('click', handleProfileSave);
             addForm.addEventListener('submit', handleAddSubmit);
             editForm.addEventListener('submit', handleEditSubmit);
             confirmDeleteBtn.addEventListener('click', handleDeleteConfirm);
@@ -382,7 +564,7 @@
                     mainMenu.querySelectorAll('a').forEach(item => { item.classList.remove('bg-white/20', 'text-white'); item.classList.add('text-white/70', 'hover:bg-white/10'); });
                     link.classList.add('bg-white/20', 'text-white');
                     link.classList.remove('text-white/70', 'hover:bg-white/10');
-                    addProductLink.style.display = link.dataset.page === 'stock-page' ? 'flex' : 'none';
+                    addProductLink.style.display = link.id === 'stock-menu-item' ? 'flex' : 'none';
                     switchPage(link.dataset.page);
                 }
             });
@@ -402,18 +584,21 @@
                 document.getElementById('ai-modal-body').innerHTML = suggestion;
                 openModal('ai-modal');
             });
-            aiAnalysisBtn.addEventListener('click', async () => {
-                const summary = `Estoque total: ${document.getElementById('kpi-total-stock').textContent}, Itens vencendo: ${document.getElementById('kpi-expiring').textContent}, Entradas: ${document.getElementById('kpi-inputs').textContent}, Saídas: ${document.getElementById('kpi-outputs').textContent}.`;
-                const analysis = await callGeminiAPI(`Sou dono de uma loja de açaí. Baseado neste resumo do meu estoque (${summary}), me dê um insight e uma sugestão para otimizar meu negócio.`);
-                document.getElementById('ai-modal-title').querySelector('span:last-child').textContent = 'Análise de Relatório';
-                document.getElementById('ai-modal-body').innerHTML = analysis;
-                openModal('ai-modal');
-            });
+            if (aiAnalysisBtn) {
+                aiAnalysisBtn.addEventListener('click', async () => {
+                    const summary = `Estoque total: ${document.getElementById('kpi-total-stock').textContent}, Itens vencendo: ${document.getElementById('kpi-expiring').textContent}, Entradas: ${document.getElementById('kpi-inputs').textContent}, Saídas: ${document.getElementById('kpi-outputs').textContent}.`;
+                    const analysis = await callGeminiAPI(`Sou dono de uma loja de açaí. Baseado neste resumo do meu estoque (${summary}), me dê um insight e uma sugestão para otimizar meu negócio.`);
+                    document.getElementById('ai-modal-title').querySelector('span:last-child').textContent = 'Análise de Relatório';
+                    document.getElementById('ai-modal-body').innerHTML = analysis;
+                    openModal('ai-modal');
+                });
+            }
         };
         
         // Initial Setup
         setupImagePreview('add-image', 'add-image-preview');
         setupImagePreview('edit-image', 'edit-image-preview');
+        setupImagePreview('profile-image-upload', 'profile-modal-image');
         setupEventListeners();
         
         // Initial Page Load
